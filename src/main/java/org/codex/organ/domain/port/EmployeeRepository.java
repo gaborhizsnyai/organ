@@ -1,18 +1,17 @@
 package org.codex.organ.domain.port;
 
-import org.codex.organ.common.Predicate;
-import org.codex.organ.common.Relation;
 import org.codex.organ.domain.model.Employee;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
+/**
+ * Repository for {@link Employee}.
+ */
 public interface EmployeeRepository {
-    Optional<Employee> findById(Long id);
+    default Optional<Employee> findById(Long id) { throw new UnsupportedOperationException("Not implemented"); }
 
-    void save(Employee employee);
+    default Stream<Employee> streamAll() { throw new UnsupportedOperationException("Not implemented"); }
 
-    void resolveRelation(Relation<Long, Long> relation);
-
-    List<Employee> findBy(Predicate<Employee> predicate);
+    default void save(Employee employee) { throw new UnsupportedOperationException("Not implemented"); }
 }

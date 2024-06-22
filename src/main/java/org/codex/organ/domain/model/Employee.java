@@ -7,14 +7,16 @@ public class Employee {
     private final Long id;
     private final Name name;
     private final Integer salary;
+    private final Long managerId;
 
     private Integer level = 0;
     private final List<Employee> subordinates = new ArrayList<>();
 
-    public Employee(Long id, Name name, Integer salary) {
+    public Employee(Long id, Name name, Integer salary, Long managerId) {
         this.id = id;
         this.name = name;
         this.salary = salary;
+        this.managerId = managerId;
     }
 
     public Long getId() {
@@ -29,19 +31,41 @@ public class Employee {
         return salary;
     }
 
-    public Integer getLevel() {
-        return level;
+    public Long getManagerId() {
+        return managerId;
     }
 
-    public void setLevel(Integer level) {
-        this.level = level;
+    /**
+     * @return the average salary of the subordinates of this manager or NaN if there are no subordinates
+     */
+    public Double getSubordinatesAverageSalary() {
+        return subordinates.stream()
+                .mapToInt(Employee::getSalary)
+                .average()
+                .orElse(Double.NaN);
+    }
+
+    /**
+     * @return the number of managers between this employee and the CEO
+     */
+    public Integer getReportingLine() {
+        return level - 1;
     }
 
     public List<Employee> getSubordinates() {
         return subordinates;
     }
 
-    public void addSubordinate(Employee employee) {
+    public boolean hasSubordinates() {
+        return !subordinates.isEmpty();
+    }
+
+    public void setManager(Employee manager) {
+        manager.addSubordinate(this);
+        level = manager.level + 1;
+    }
+
+    private void addSubordinate(Employee employee) {
         subordinates.add(employee);
     }
 
@@ -50,28 +74,17 @@ public class Employee {
         return "%s (%d)".formatted(name, id);
     }
 
-    public static class Builder {
-        private Long id;
-        private Name name;
-        private Integer salary;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Employee employee = (Employee) obj;
 
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
+        return id.toString().equals(employee.id.toString());
+    }
 
-        public Builder name(Name name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder salary(Integer salary) {
-            this.salary = salary;
-            return this;
-        }
-
-        public Employee build() {
-            return new Employee(id, name, salary);
-        }
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

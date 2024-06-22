@@ -1,12 +1,14 @@
-package org.codex.organ.app;
+package org.codex.organ.app.service;
 
 import org.codex.organ.app.mapper.EmployeeImportMapper;
-import org.codex.organ.app.port.EmployeeDataSource;
-import org.codex.organ.app.port.EmployeeRecord;
-import org.codex.organ.common.Relation;
+import org.codex.organ.app.port.in.ImportEmployeesUseCase;
+import org.codex.organ.app.port.out.EmployeeDataSource;
 import org.codex.organ.domain.port.EmployeeRepository;
 
-public class ImportEmployeesService {
+/**
+ * Service to import employees from a data source and save them in the repository.
+ */
+public class ImportEmployeesService implements ImportEmployeesUseCase {
 
     private final EmployeeRepository repository;
     private final EmployeeDataSource dataSource;
@@ -22,16 +24,10 @@ public class ImportEmployeesService {
 
     public void exec(String source) {
         try (var stream = dataSource.stream(source)) {
-            stream.map(this::saveEmployee)
-                    .toList()
-                    .forEach(repository::resolveRelation);
+            stream.map(mapper::toEntity)
+                    .forEach(repository::save);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error importing employees", e);
         }
-    }
-
-    private Relation<Long, Long> saveEmployee(EmployeeRecord data) {
-        repository.save(mapper.toEntity(data));
-        return mapper.toRelation(data);
     }
 }
