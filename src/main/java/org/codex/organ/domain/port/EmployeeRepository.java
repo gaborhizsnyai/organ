@@ -13,5 +13,7 @@ public interface EmployeeRepository {
 
     default Stream<Employee> streamAll() { throw new UnsupportedOperationException("Not implemented"); }
 
+    default Integer countAll() { throw new UnsupportedOperationException("Not implemented"); }
+
     default void save(Employee employee) { throw new UnsupportedOperationException("Not implemented"); }
 }

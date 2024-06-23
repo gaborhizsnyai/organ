@@ -22,12 +22,13 @@ public class ImportEmployeesService implements ImportEmployeesUseCase {
         this.mapper = mapper;
     }
 
-    public void exec(String source) {
+    public Integer exec(String source) {
         try (var stream = dataSource.stream(source)) {
             stream.map(mapper::toEntity)
                     .forEach(repository::save);
+            return repository.countAll();
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error importing employees", e);
+            throw new IllegalArgumentException(e.getMessage(), e);
         }
     }
 }

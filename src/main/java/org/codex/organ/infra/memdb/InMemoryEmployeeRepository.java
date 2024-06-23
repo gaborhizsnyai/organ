@@ -20,6 +20,11 @@ public class InMemoryEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
+    public Integer countAll() {
+        return employees.size();
+    }
+
+    @Override
     public Stream<Employee> streamAll() {
         return employees.values().stream();
     }

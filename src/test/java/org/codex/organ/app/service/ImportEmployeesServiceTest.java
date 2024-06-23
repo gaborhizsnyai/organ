@@ -42,6 +42,11 @@ class ImportEmployeesServiceTest {
         public void save(Employee employee) {
             capturedEmployees.add(employee);
         }
+
+        @Override
+        public Integer countAll() {
+            return capturedEmployees.size();
+        }
     }
 
     private static class MockEmployeeDataSource implements EmployeeDataSource {

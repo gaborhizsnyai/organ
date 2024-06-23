@@ -26,8 +26,8 @@ public class ReportManagersWithTooHighEarningsService implements ReportManagersW
         var items = repository.streamAll()
                 .filter(Employee::hasSubordinates)
                 .map(employee -> Finding.of(employee, thresholdPercentage))
-                .filter(Finding::isValid)
-                .map(Finding::toString)
+                .filter(Finding::hasAnythingToReport)
+                .map(Finding::reportItem)
                 .toList();
 
         return new Report("Managers with too high earnings", items);
@@ -46,13 +46,15 @@ public class ReportManagersWithTooHighEarningsService implements ReportManagersW
             return new Finding(employee, (int) Math.ceil(surplus));
         }
 
-        public boolean isValid() {
+        public boolean hasAnythingToReport() {
             return surplus > 0;
         }
 
-        @Override
-        public String toString() {
-            return "%s has earnings higher than expected by %d".formatted(employee, surplus);
+        public Report.Item reportItem() {
+            return new Report.Item(
+                    employee,
+                    "has earnings higher than expected by " + surplus
+            );
         }
     }
 }

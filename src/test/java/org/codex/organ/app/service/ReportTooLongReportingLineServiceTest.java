@@ -33,7 +33,7 @@ class ReportTooLongReportingLineServiceTest {
 
         assertEquals("Employees with too long reporting line", report.title());
         assertEquals(1, report.items().size());
-        assertEquals("Jack Doe (3) has reporting line longer than expected by 1", report.items().getFirst());
+        assertEquals("Jack Doe (3) has reporting line longer than expected by 1", report.items().getFirst().toString());
     }
 
     @Test

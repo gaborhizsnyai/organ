@@ -25,8 +25,8 @@ public class ReportTooLongReportingLineService implements ReportTooLongReporting
     public Report exec(Integer threshold) {
         var items = repository.streamAll()
                 .map(employee -> Finding.of(employee, threshold))
-                .filter(Finding::isValid)
-                .map(Finding::toString)
+                .filter(Finding::hasAnythingToReport)
+                .map(Finding::reportItem)
                 .toList();
 
         return new Report("Employees with too long reporting line", items);
@@ -42,13 +42,15 @@ public class ReportTooLongReportingLineService implements ReportTooLongReporting
             return new Finding(employee, employee.getReportingLine() - threshold);
         }
 
-        public boolean isValid() {
+        public boolean hasAnythingToReport() {
             return difference > 0;
         }
 
-        @Override
-        public String toString() {
-            return "%s has reporting line longer than expected by %d".formatted(employee, difference);
+        public Report.Item reportItem() {
+            return new Report.Item(
+                    employee,
+                    "has reporting line longer than expected by " + difference
+            );
         }
     }
 

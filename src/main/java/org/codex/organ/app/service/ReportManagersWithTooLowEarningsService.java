@@ -27,8 +27,8 @@ public class ReportManagersWithTooLowEarningsService implements ReportManagersWi
         var items = repository.streamAll()
                 .filter(Employee::hasSubordinates)
                 .map(employee -> Finding.of(employee, thresholdPercentage))
-                .filter(Finding::isValid)
-                .map(Finding::toString)
+                .filter(Finding::hasAnythingToReport)
+                .map(Finding::reportItem)
                 .toList();
 
         return new Report("Managers with too low earnings", items);
@@ -47,13 +47,15 @@ public class ReportManagersWithTooLowEarningsService implements ReportManagersWi
             return new Finding(employee, (int) Math.ceil(deficit));
         }
 
-        public boolean isValid() {
+        public boolean hasAnythingToReport() {
             return deficit > 0;
         }
 
-        @Override
-        public String toString() {
-            return "%s has earnings lower than expected by %d".formatted(employee, deficit);
+        public Report.Item reportItem() {
+            return new Report.Item(
+                    employee,
+                    "has earnings lower than expected by " + deficit
+            );
         }
     }
 }

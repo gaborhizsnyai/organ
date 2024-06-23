@@ -33,7 +33,7 @@ class ReportManagersWithTooHighEarningsServiceTest {
 
         assertEquals("Managers with too high earnings", report.title());
         assertEquals(1, report.items().size());
-        assertEquals("John Doe (1) has earnings higher than expected by 50", report.items().getFirst());
+        assertEquals("John Doe (1) has earnings higher than expected by 50", report.items().getFirst().toString());
     }
 
     @Test
