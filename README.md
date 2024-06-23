@@ -67,17 +67,12 @@ but it makes the code more flexible and easier to test and maintain.
 
 Also, I've created an externalized configuration for application components as a 'CSV File to Console' reporting context.
 
-The code currently uses file access through `java.nio.Files`, which is a simple and efficient way to read files for the first,
-however, to make the app 12-factor-ish, we should use pipes to read file content from the standard input.
-Let's stick with the file access for now. 
-
 ### Testing
 To verify the correctness of the solution, I've created unit tests for the business logic. Some of the tests
 required mocking the input/output components. I've used custom components for that, which are simple and easy to use
 in this code structure, however, in a real-world application, we should use a more sophisticated mocking framework.
 
-Due to missing mocking tools, the interaction with the file system is not covered by tests. The test suite
-currently contains only unit tests, integration tests and end-to-end tests are missing.
+Due to missing mocking tools, the interaction with the file system is not covered by tests.
 
 ### Error handling
 The error handling is very simple in this solution. To keep the code simple, I've used basic exceptions only.
@@ -85,3 +80,18 @@ Also, I assumed that the input file is mostly correct, and the data is consisten
 
 In a real-world application, we need a more sophisticated error handling strategy, like
 filtering rows causing errors, to avoid breaking the whole process.
+
+### Parameters
+The application takes only one parameter, the path to the CSV file.
+The reporting components can be parameterized, however, the default configuration is set to use hardcoded values.
+To make the application more flexible, we could use a configuration file or command-line parameters.
+
+## How to run the application
+The application is a simple Java application, built with Maven. To package and run the application, you need to have Java and Maven installed.
+
+To build and run the application, execute the following commands in the project root directory:
+
+```
+mvn clean package
+java -jar target/organ.jar <path-to-csv-file>
+```

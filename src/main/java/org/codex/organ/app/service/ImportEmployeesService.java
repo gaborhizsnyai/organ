@@ -3,6 +3,7 @@ package org.codex.organ.app.service;
 import org.codex.organ.app.mapper.EmployeeImportMapper;
 import org.codex.organ.app.port.in.ImportEmployeesUseCase;
 import org.codex.organ.app.port.out.EmployeeDataSource;
+import org.codex.organ.common.WrappingException;
 import org.codex.organ.domain.port.EmployeeRepository;
 
 /**
@@ -28,7 +29,7 @@ public class ImportEmployeesService implements ImportEmployeesUseCase {
                     .forEach(repository::save);
             return repository.countAll();
         } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
+            throw new WrappingException(e);
         }
     }
 }
