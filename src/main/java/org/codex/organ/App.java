@@ -2,13 +2,12 @@ package org.codex.organ;
 
 import org.codex.organ.common.ApplicationConfig;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class App {
-    private static final Logger log = Logger.getLogger(App.class.getName());
+    private static final Logger log = Logger.getLogger(App.class.getSimpleName());
 
     public static void main(String[] args) {
         var params = Parameters.from(args);
@@ -19,40 +18,18 @@ public class App {
         }
 
         var buffer = new StringWriter();
-        try (var output = new PrintWriter(buffer)) {
+        try (var output = new PrintWriter(buffer);
+             var source = new FileInputStream(params.source())
+        ) {
             var config = new ApplicationConfig();
 
-            new App(config).run(params, output);
+            new Analyzer(config).run(params, source, output);
 
             output.flush();
             log.log(Level.INFO, "\n{0}", buffer);
         } catch (Exception e) {
             log.log(Level.SEVERE, e.getMessage());
         }
-    }
-
-    private final ApplicationConfig config;
-
-    public App(ApplicationConfig config) {
-        this.config = config;
-    }
-
-    public void run(Parameters params, PrintWriter output) {
-        var count = config.importEmployeesUseCase().exec(params.source());
-        log.log(Level.INFO, "Processing {0} employee(s)", count);
-
-        config.reportManagersWithLowEarningsUseCase()
-                .exec(params.lowEarningsThreshold())
-                .print(output);
-
-        config.reportManagersWithHighEarningsUseCase()
-                .exec(params.highEarningsThreshold())
-                .print(output);
-
-        config.reportTooLongReportingLineUseCase()
-                .exec(params.reportingLineThreshold())
-                .print(output);
-
     }
 
     public record Parameters(
