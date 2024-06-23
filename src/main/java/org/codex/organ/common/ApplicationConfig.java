@@ -11,7 +11,6 @@ import org.codex.organ.app.service.ReportManagersWithTooLowEarningsService;
 import org.codex.organ.app.service.ReportTooLongReportingLineService;
 import org.codex.organ.domain.port.EmployeeRepository;
 import org.codex.organ.infra.csv.CSVEmployeeDataSource;
-import org.codex.organ.infra.csv.CSVParser;
 import org.codex.organ.infra.memdb.InMemoryEmployeeRepository;
 
 /**
@@ -26,8 +25,7 @@ public class ApplicationConfig {
     private final EmployeeRepository employeeRepository;
 
     public ApplicationConfig() {
-        var csvParser = new CSVParser();
-        var employeeDataSource = new CSVEmployeeDataSource(csvParser);
+        var employeeDataSource = new CSVEmployeeDataSource();
         var employeeImportMapper = new EmployeeImportMapper();
 
         this.employeeRepository = new InMemoryEmployeeRepository();

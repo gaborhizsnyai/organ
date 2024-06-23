@@ -8,6 +8,7 @@ import org.codex.organ.domain.model.Name;
 import org.codex.organ.domain.port.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -27,9 +28,8 @@ class ImportEmployeesServiceTest {
 
         var service = new ImportEmployeesService(repository, dataSource, mapper);
 
-        service.exec("source");
+        service.exec(null);
 
-        assertEquals("source", dataSource.capturedSource);
         assertEquals(2, repository.capturedEmployees.size());
         assertEquals(new Employee(1L, new Name("John", "Doe"), 1000, null), repository.capturedEmployees.get(0));
         assertEquals(new Employee(2L, new Name("Jane", "Doe"), 2000, 1L), repository.capturedEmployees.get(1));
@@ -51,11 +51,9 @@ class ImportEmployeesServiceTest {
 
     private static class MockEmployeeDataSource implements EmployeeDataSource {
         List<EmployeeRecord> records = new ArrayList<>();
-        String capturedSource;
 
         @Override
-        public Stream<EmployeeRecord> stream(String source) {
-            capturedSource = source;
+        public Stream<EmployeeRecord> stream(InputStream source) {
             return records.stream();
         }
     }

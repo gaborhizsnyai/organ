@@ -6,6 +6,8 @@ import org.codex.organ.app.port.out.EmployeeDataSource;
 import org.codex.organ.common.WrappingException;
 import org.codex.organ.domain.port.EmployeeRepository;
 
+import java.io.InputStream;
+
 /**
  * Service to import employees from a data source and save them in the repository.
  */
@@ -23,7 +25,7 @@ public class ImportEmployeesService implements ImportEmployeesUseCase {
         this.mapper = mapper;
     }
 
-    public Integer exec(String source) {
+    public Integer exec(InputStream source) {
         try (var stream = dataSource.stream(source)) {
             stream.map(mapper::toEntity)
                     .forEach(repository::save);
