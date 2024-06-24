@@ -70,7 +70,7 @@ Also, I've created an externalized configuration for application components as a
 ### Testing
 To verify the correctness of the solution, I've created unit tests for the business logic. Some of the tests
 required mocking other components. I've used custom components for that, which were easy to implement when using ports
-for the services the tests depended on. However, in a more complex situation, a mocking framework should is really must have. 
+for the services the tests depended on. However, in a more complex situation, a mocking framework is really must have. 
 
 ### Error handling
 The error handling is very simple in this solution. I've used basic exceptions only and also,
