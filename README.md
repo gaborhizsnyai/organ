@@ -69,29 +69,51 @@ Also, I've created an externalized configuration for application components as a
 
 ### Testing
 To verify the correctness of the solution, I've created unit tests for the business logic. Some of the tests
-required mocking the input/output components. I've used custom components for that, which are simple and easy to use
-in this code structure, however, in a real-world application, we should use a more sophisticated mocking framework.
-
-Due to missing mocking tools, the interaction with the file system is not covered by tests.
+required mocking other components. I've used custom components for that, which were easy to implement when using ports
+for the services the tests depended on. However, in a more complex situation, a mocking framework should is really must have. 
 
 ### Error handling
-The error handling is very simple in this solution. To keep the code simple, I've used basic exceptions only.
-Also, I assumed that the input file is mostly correct, and the data is consistent.
-
-In a real-world application, we need a more sophisticated error handling strategy, like
-filtering rows causing errors, to avoid breaking the whole process.
+The error handling is very simple in this solution. I've used basic exceptions only and also,
+I assumed that the input file is mostly correct, and the data is consistent.
 
 ### Parameters
 The application takes only one parameter, the path to the CSV file.
 The reporting components can be parameterized, however, the default configuration is set to use hardcoded values.
 To make the application more flexible, we could use a configuration file or command-line parameters.
 
-## How to run the application
-The application is a simple Java application, built with Maven. To package and run the application, you need to have Java and Maven installed.
+## Design
 
-To build and run the application, execute the following commands in the project root directory:
+### The domain
+- `Employee` - a simple POJO class representing an employee during the analysis.
+  The objects are nodes in the organization structure, where the root node is the CEO.
+- `EmployeeRepository` - a simple repository interface to store and retrieve employees.
+
+### Use cases/services
+- `ImportEmployeesUseCase` - a service to import employees from an external source to the repository.
+   The service uses the `EmployeeRepository` to store the employees, and the `EmployeeDataSource` to import the data from.
+   The `EmployeeRecord` used in this process is a simple DTO class to represent and validate the data from the external source.
+- Reporting services - services to report the analysis results. The services use the `EmployeeRepository` to get the employees and their subordinates
+  and produces the `Report` objects with the results.
+    - `ReportManagersWithLowEarningsUseCase`- a service to report managers with low earnings by comparing their salary to the average salary of their subordinates.
+    - `ReportManagersWithHighEarningsUseCase`- a service to report managers with high earnings by comparing their salary to the average salary of their subordinates.
+    - `ReportTooLongReportingLineUseCase`- a service to report employees with a reporting line that is too long.
+
+### Adapters
+- `CsvFileEmployeeImporter` - an adapter to import employees from a CSV file. It uses the `CSVSpliterator` and `CSVRowMapper` to read and map the CSV rows to `EmployeeRecord` objects.
+  The Spliterator is a stateful iterator to read the CSV file line by line, so it can report the line number as well in case of an error.
+- `InMemoryEmployeeRepository` - an adapter to store employees in memory. It uses a tree structure to store the employees and an indexed structure to map the employees by ID.
+
+### Configuration
+The components of the application are loosely coupled and can be easily replaced with other implementations.
+It makes the implementation more flexible and easier to test. To make the components work together, we need to configure them.
+The configuration is done in the `ApplicationConfig` class, where we define the components and their dependencies.
+
+## How to run the application
+The application is a simple Java application, built with Maven. To package and run it, you need to have Java and Maven installed,
+execute the following commands in the project root directory:
 
 ```
 mvn clean package
 java -jar target/organ.jar <path-to-csv-file>
 ```
+For testing, you can use the provided CSV file `data/sample.csv`.
