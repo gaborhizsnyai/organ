@@ -2,10 +2,10 @@ package org.codex.organ.app.service;
 
 import org.codex.organ.app.dto.EmployeeRecord;
 import org.codex.organ.app.mapper.EmployeeImportMapper;
-import org.codex.organ.app.port.out.EmployeeDataSource;
+import org.codex.organ.app.port.EmployeeDataSource;
 import org.codex.organ.domain.model.Employee;
 import org.codex.organ.domain.model.Name;
-import org.codex.organ.domain.port.EmployeeRepository;
+import org.codex.organ.domain.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;

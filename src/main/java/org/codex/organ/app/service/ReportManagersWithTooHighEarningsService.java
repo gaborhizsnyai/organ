@@ -1,9 +1,9 @@
 package org.codex.organ.app.service;
 
 import org.codex.organ.app.dto.Report;
-import org.codex.organ.app.port.in.ReportManagersWithHighEarningsUseCase;
+import org.codex.organ.app.usecase.ReportManagersWithHighEarningsUseCase;
 import org.codex.organ.domain.model.Employee;
-import org.codex.organ.domain.port.EmployeeRepository;
+import org.codex.organ.domain.repository.EmployeeRepository;
 
 /**
  * Service that reports managers with earnings higher than expected.

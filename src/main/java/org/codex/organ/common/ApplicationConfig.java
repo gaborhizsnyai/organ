@@ -1,15 +1,14 @@
 package org.codex.organ.common;
 
 import org.codex.organ.app.mapper.EmployeeImportMapper;
-import org.codex.organ.app.port.in.ImportEmployeesUseCase;
-import org.codex.organ.app.port.in.ReportManagersWithHighEarningsUseCase;
-import org.codex.organ.app.port.in.ReportManagersWithLowEarningsUseCase;
-import org.codex.organ.app.port.in.ReportTooLongReportingLineUseCase;
+import org.codex.organ.app.usecase.ImportEmployeesUseCase;
+import org.codex.organ.app.usecase.ReportManagersWithHighEarningsUseCase;
+import org.codex.organ.app.usecase.ReportManagersWithLowEarningsUseCase;
+import org.codex.organ.app.usecase.ReportTooLongReportingLineUseCase;
 import org.codex.organ.app.service.ImportEmployeesService;
 import org.codex.organ.app.service.ReportManagersWithTooHighEarningsService;
 import org.codex.organ.app.service.ReportManagersWithTooLowEarningsService;
 import org.codex.organ.app.service.ReportTooLongReportingLineService;
-import org.codex.organ.domain.port.EmployeeRepository;
 import org.codex.organ.infra.csv.CSVEmployeeDataSource;
 import org.codex.organ.infra.memdb.InMemoryEmployeeRepository;
 
@@ -22,13 +21,10 @@ public class ApplicationConfig {
     private final ReportManagersWithLowEarningsUseCase reportManagersWithLowEarningsUseCase;
     private final ReportTooLongReportingLineUseCase reportTooLongReportingLineUseCase;
 
-    private final EmployeeRepository employeeRepository;
-
     public ApplicationConfig() {
+        var employeeRepository = new InMemoryEmployeeRepository();
         var employeeDataSource = new CSVEmployeeDataSource();
         var employeeImportMapper = new EmployeeImportMapper();
-
-        this.employeeRepository = new InMemoryEmployeeRepository();
 
         this.importEmployeesUseCase = new ImportEmployeesService(employeeRepository, employeeDataSource, employeeImportMapper);
         this.reportManagersWithHighEarningsUseCase = new ReportManagersWithTooHighEarningsService(employeeRepository);

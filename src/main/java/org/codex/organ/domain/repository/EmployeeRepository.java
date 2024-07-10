@@ -1,4 +1,4 @@
-package org.codex.organ.domain.port;
+package org.codex.organ.domain.repository;
 
 import org.codex.organ.domain.model.Employee;
 

@@ -1,4 +1,4 @@
-package org.codex.organ.app.port.in;
+package org.codex.organ.app.usecase;
 
 import java.io.InputStream;
 

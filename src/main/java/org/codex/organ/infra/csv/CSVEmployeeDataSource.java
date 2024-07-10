@@ -1,7 +1,7 @@
 package org.codex.organ.infra.csv;
 
 import org.codex.organ.app.dto.EmployeeRecord;
-import org.codex.organ.app.port.out.EmployeeDataSource;
+import org.codex.organ.app.port.EmployeeDataSource;
 
 import java.io.IOException;
 import java.io.InputStream;

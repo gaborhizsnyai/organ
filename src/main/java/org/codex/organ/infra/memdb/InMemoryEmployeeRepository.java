@@ -1,7 +1,7 @@
 package org.codex.organ.infra.memdb;
 
 import org.codex.organ.domain.model.Employee;
-import org.codex.organ.domain.port.EmployeeRepository;
+import org.codex.organ.domain.repository.EmployeeRepository;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package org.codex.organ.app.port.out;
+package org.codex.organ.app.port;
 
 import org.codex.organ.app.dto.EmployeeRecord;
 

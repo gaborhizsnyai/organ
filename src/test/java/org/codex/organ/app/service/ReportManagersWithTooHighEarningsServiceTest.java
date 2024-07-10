@@ -2,7 +2,7 @@ package org.codex.organ.app.service;
 
 import org.codex.organ.domain.model.Employee;
 import org.codex.organ.domain.model.Name;
-import org.codex.organ.domain.port.EmployeeRepository;
+import org.codex.organ.domain.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
